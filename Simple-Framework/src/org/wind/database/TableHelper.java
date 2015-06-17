@@ -1,10 +1,12 @@
 package org.wind.database;
+
 import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import org.wind.annotation.Table;
 
 import android.database.sqlite.SQLiteDatabase;
+
 public class TableHelper<T> {
 	private Class<T> clazz = null;
 	// 抽象对象
@@ -87,7 +89,7 @@ public class TableHelper<T> {
 		StringBuilder sb = new StringBuilder();
 		org.wind.annotation.Field inject = field
 				.getAnnotation(org.wind.annotation.Field.class);
-		if(inject.key()==true){
+		if (inject.key() == true) {
 			return sb;
 		}
 		sb.append(inject.name()).append(" ");
