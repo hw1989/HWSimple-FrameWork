@@ -166,12 +166,12 @@ public class CanlendarView extends FrameLayout {
 				}
 			}
 			if (dir == Direction.Horizontal) {
-                //两个临界值(1.最顶部继续向上滑动)(2.最底部继续下滑)
+				// 两个临界值(1.最顶部继续向上滑动)(2.最底部继续下滑)
 				if (getScaleY() >= moveMaxY && disy > 0) {
-//					scrollTo(0, moveMaxY);
-				}else if(getScaleY()==0&&disy<0){
-//					scrollTo(0, 0);
-				}else{
+					// scrollTo(0, moveMaxY);
+				} else if (getScaleY() == 0 && disy < 0) {
+					// scrollTo(0, 0);
+				} else {
 					scrollBy(-disx, 0);
 				}
 				point.set((int) event.getX(), (int) event.getY());
@@ -188,13 +188,16 @@ public class CanlendarView extends FrameLayout {
 				tracker.computeCurrentVelocity(1000, maxspeed);
 				int initialVelocity = (int) tracker.getYVelocity();
 				if (Math.abs(initialVelocity) > minspeed) {
-					scroller.fling(0, (int) event.getY(), 0, -initialVelocity,
-							0, getWidth(), 0 , moveMaxY );
+					// scroller.fling(0, (int) event.getY(), 0,
+					// -initialVelocity,
+					// 0, getWidth(), 0 , moveMaxY );
+					scroller.fling(getScrollX(), getScrollY(), 0,
+							-initialVelocity, 0, getWidth(), -120,
+							moveMaxY + 120);
 					awakenScrollBars(scroller.getDuration());
 					invalidate();
 				}
 			}
-
 			destoryTracker();
 		}
 		return true;
@@ -226,14 +229,28 @@ public class CanlendarView extends FrameLayout {
 	public void computeScroll() {
 		super.computeScroll();
 		if (scroller.computeScrollOffset()) {
+			// if (dir == Direction.Vertical) {
+			// if (getScrollY()< -250) {
+			// scrollTo(0, 0);
+			// } else if (getScrollY() > moveMaxY + 250) {
+			// scrollTo(0, moveMaxY);
+			// }
+			// return;
+			// } else if (dir == Direction.Horizontal) {
+			//
+			// }
 			scrollTo(scroller.getCurrX(), scroller.getCurrY());
 			postInvalidate();
 		} else {
-			// if(){
-			//
-			// }else if(){
-			//
-			// }
+			if (dir == Direction.Vertical) {
+				if (getScrollY() < 0) {
+					scrollTo(0, 0);
+				} else if (getScrollY() > moveMaxY) {
+					scrollTo(0, moveMaxY);
+				}
+			} else if (dir == Direction.Horizontal) {
+
+			}
 		}
 	}
 }

@@ -31,7 +31,8 @@ public class TableView extends View {
 	private Paint paint_txt = null;
 	// 线的画笔
 	private Paint paint = null;
-    private DecimalFormat format=null;
+	private DecimalFormat format = null;
+
 	public TableView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init();
@@ -48,7 +49,7 @@ public class TableView extends View {
 	}
 
 	private void init() {
-		format=new DecimalFormat("00");
+		format = new DecimalFormat("00");
 		paint_txt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint_txt.setAntiAlias(true);
 		paint_txt.setTextSize(25);
@@ -87,8 +88,9 @@ public class TableView extends View {
 		for (int i = 0; i < Hlines; i++) {
 			canvas.drawLine(paddtxt * 2 + txtwid, paddtb + i * cellhei, width
 					- paddlr, paddtb + i * cellhei, paint);
-			//画文字
-			canvas.drawText(format.format(i)+":00", paddtxt, paddtb + i * cellhei, paint_txt);
+			// 画文字
+			canvas.drawText(format.format(i) + ":00", paddtxt, paddtb + i
+					* cellhei, paint_txt);
 		}
 	}
 
