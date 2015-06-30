@@ -192,8 +192,8 @@ public class CanlendarView extends FrameLayout {
 					// -initialVelocity,
 					// 0, getWidth(), 0 , moveMaxY );
 					scroller.fling(getScrollX(), getScrollY(), 0,
-							-initialVelocity, 0, getWidth(), -120,
-							moveMaxY + 120);
+							-initialVelocity, 0, getWidth(), -160,
+							moveMaxY + 160);
 					awakenScrollBars(scroller.getDuration());
 					invalidate();
 				}
