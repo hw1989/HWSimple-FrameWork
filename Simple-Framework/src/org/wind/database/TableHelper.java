@@ -7,12 +7,12 @@ import org.wind.annotation.Table;
 
 import android.database.sqlite.SQLiteDatabase;
 
-public class TableHelper<T> {
-	private Class<T> clazz = null;
+public class TableHelper {
+	private Class<?> clazz = null;
 	// 抽象对象
 	private DBInterface dbi = null;
 
-	public TableHelper() {
+	private TableHelper() {
 	}
 
 	/**
@@ -56,6 +56,35 @@ public class TableHelper<T> {
 	}
 
 	public boolean creatTable(SQLiteDatabase db) {
+		// StringBuilder sb = new StringBuilder();
+		// if (clazz != null) {
+		// Table table = clazz.getAnnotation(Table.class);
+		// sb.append("create table if not exists ");
+		// // 表名
+		// sb.append(" ").append(table.DTname()).append(" (");
+		// sb.append(" _id ").append(DataType.Type_Int)
+		// .append(" primary key autoincrement ");
+		// Field[] fields = clazz.getDeclaredFields();
+		// for (Field field : fields) {
+		// if (field.isAnnotationPresent(org.wind.annotation.Field.class)) {
+		// sb.append(getColumn(field));
+		// }
+		// }
+		// sb.deleteCharAt(sb.length() - 1);
+		// sb.append(" )");
+		// } else if (dbi != null) {
+		// sb.append(dbi.getTableSQL());
+		// }
+		// db.execSQL(sb.toString());
+		db.execSQL(getSQL());
+		db.close();
+		return true;
+	}
+
+	/**
+	 * 获取sql语句
+	 */
+	public String getSQL() {
 		StringBuilder sb = new StringBuilder();
 		if (clazz != null) {
 			Table table = clazz.getAnnotation(Table.class);
@@ -64,9 +93,14 @@ public class TableHelper<T> {
 			sb.append(" ").append(table.DTname()).append(" (");
 			sb.append(" _id ").append(DataType.Type_Int)
 					.append(" primary key autoincrement ");
+			boolean flag=false;
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field field : fields) {
 				if (field.isAnnotationPresent(org.wind.annotation.Field.class)) {
+					if(!flag){
+						flag=true;
+						sb.append(",");
+					}
 					sb.append(getColumn(field));
 				}
 			}
@@ -75,8 +109,7 @@ public class TableHelper<T> {
 		} else if (dbi != null) {
 			sb.append(dbi.getTableSQL());
 		}
-		db.execSQL(sb.toString());
-		return true;
+		return sb.toString();
 	}
 
 	/**
