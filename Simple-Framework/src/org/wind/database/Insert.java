@@ -81,6 +81,7 @@ public class Insert {
 			boolean flag = false;
 			Object value = null;
 			for (Field field : fields) {
+				field.setAccessible(true);
 				if (field.isAnnotationPresent(org.wind.annotation.Field.class)) {
 					try {
 						name = field.getAnnotation(org.wind.annotation.Field.class)
