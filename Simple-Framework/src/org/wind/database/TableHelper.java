@@ -93,12 +93,12 @@ public class TableHelper {
 			sb.append(" ").append(table.DTname()).append(" (");
 			sb.append(" _id ").append(DataType.Type_Int)
 					.append(" primary key autoincrement ");
-			boolean flag=false;
+			boolean flag = false;
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field field : fields) {
 				if (field.isAnnotationPresent(org.wind.annotation.Field.class)) {
-					if(!flag){
-						flag=true;
+					if (!flag) {
+						flag = true;
 						sb.append(",");
 					}
 					sb.append(getColumn(field));
@@ -140,7 +140,8 @@ public class TableHelper {
 			sb.append(DataType.Type_Int);
 		} else if (Boolean.class.equals(field.getType())
 				|| Boolean.TYPE.equals(field.getType())) {
-			sb.append(DataType.Type_Text);
+			// sb.append(DataType.Type_Text); 使用int表示
+			sb.append(DataType.Type_Int);
 		} else if (Byte.class.equals(field.getType())
 				|| Byte.TYPE.equals(field.getType())) {
 			sb.append(DataType.Type_Int);

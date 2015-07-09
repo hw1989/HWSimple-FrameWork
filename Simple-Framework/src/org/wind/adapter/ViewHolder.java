@@ -5,21 +5,23 @@ import android.view.View;
 
 /**
  * 简便的 ViewHolder
+ * ViewHolder()适应BaseExpandableListAdapter
+ * getInstance()适应BaseAdapter
  */
 public class ViewHolder {
 	private static ViewHolder instance = null;
 	private SparseArray<View> array = null;
 	private View childView = null;
-
-	private ViewHolder() {
+    
+	public ViewHolder() {
 	}
 
-	public static ViewHolder getInstance() {
-		if (instance == null) {
-			instance = new ViewHolder();
-		}
-		return instance;
-	}
+	 public static ViewHolder getInstance() {
+	 if (instance == null) {
+	 instance = new ViewHolder();
+	 }
+	 return instance;
+	 }
 
 	/**
 	 * @param view
