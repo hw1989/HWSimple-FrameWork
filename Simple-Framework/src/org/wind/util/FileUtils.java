@@ -10,8 +10,8 @@ public class FileUtils {
 	 * @param create创建路径
 	 */
 	public static boolean createorexistsPath(String path, boolean create) {
-		File file = new File("");
-		if (file.exists()) {
+		File file = new File(path);
+		if (!file.exists()) {
 			file.mkdirs();
 			return false;
 		} else {
