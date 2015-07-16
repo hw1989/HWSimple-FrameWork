@@ -93,6 +93,7 @@ public class TableHelper {
 			sb.append(" ").append(table.DTname()).append(" (");
 			sb.append(" _id ").append(DataType.Type_Int)
 					.append(" primary key autoincrement ");
+			// 标记非第一个字段
 			boolean flag = false;
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field field : fields) {
@@ -147,6 +148,10 @@ public class TableHelper {
 			sb.append(DataType.Type_Int);
 		} else {
 			sb.append(DataType.Type_Text);
+		}
+		// 设置唯一字段
+		if (inject.unique()) {
+			sb.append(" UNIQUE ");
 		}
 		sb.append(" ,");
 		return sb;

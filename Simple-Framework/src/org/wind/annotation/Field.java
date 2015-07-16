@@ -18,7 +18,8 @@ public @interface Field {
 	// 数据的类型 主键默认为int
 	public String type() default "Text";
 
-	// 是否为主键
+	// 是否为主键,对象中不存在主键
+	@Deprecated
 	public boolean key() default false;
 
 	// 是否自增
@@ -27,4 +28,6 @@ public @interface Field {
 	// 设置文本字段的长度
 	public int size() default 10;
 
+	// 设置唯一字段
+	public boolean unique() default false;
 }
