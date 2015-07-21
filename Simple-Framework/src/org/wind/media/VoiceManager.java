@@ -9,11 +9,15 @@ import android.os.Looper;
 public class VoiceManager {
 	private MediaRecorder recorder = null;
 	private VoiceThread thread = null;
-	//主线程的handler
-	private Handler mainHandler=null;
-	//录音默认时常为30秒
-    private int timesize=30;
-	private VoiceManager(String filepath,Handler handler) {
+	// 主线程的handler
+	private Handler mainHandler = null;
+	// 子线程
+	private Handler handler = null;
+	// 录音默认时常为30秒
+	private int timesize = 30;
+	private Object obj = new Object();
+
+	private VoiceManager(String filepath, Handler handler) {
 		recorder = new MediaRecorder();
 		// 设置录音源
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -22,32 +26,49 @@ public class VoiceManager {
 		// 设置录音的文件路径
 		recorder.setOutputFile(filepath);
 		recorder.setVideoEncoder(MediaRecorder.AudioEncoder.AMR_WB);
-		thread=new VoiceThread();
-//	    Looper looper=Looper.myLooper();
-//	    looper.prepare();
-//	    handler=new Handler(looper);
+		thread = new VoiceThread();
+		// Looper looper=Looper.myLooper();
+		// looper.prepare();
+		// handler=new Handler(looper);
 	}
 
 	public boolean startRecord() {
 
-		
-
 		return true;
 	}
-    class VoiceThread extends Thread{
-    	int i=0;
-    	@Override
-    	public void run() {
-    		try {
+
+	class VoiceThread extends Thread {
+		int i = 0;
+		// 继续录制
+		boolean flag = true;
+
+		@Override
+		public void run() {
+			Looper.prepare();
+			synchronized (obj) {
+				handler = new Handler(Looper.myLooper()) {
+
+				};
+			}
+			Looper.loop();
+			try {
 				recorder.prepare();
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-//    		for(int ){
-//    			
-//    		}
-    	}
-    }
+			for (i = 0; i < timesize && flag; i++) {
+
+			}
+		}
+	}
+	public Handler getHandler(){
+//		synchronized(){
+//			
+//		}
+		if(handler==null){
+			obj.wait();
+		}
+	}
 }
