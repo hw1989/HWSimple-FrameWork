@@ -39,4 +39,40 @@ public abstract class OtherAdapter<T> extends BaseAdapter {
 		return position;
 	}
 
+	// 添加单个
+	public void addItem(T t, int index) {
+		if (t != null) {
+			this.list.add(index, t);
+			notifyDataSetChanged();
+		}
+	};
+
+	// 添加多个记录
+	public void addItems(ArrayList<T> t, int index) {
+		if (t != null) {
+			if (index > getCount() - 1 || index < 0) {
+				this.list.addAll(t);
+			} else {
+				this.list.addAll(index, t);
+			}
+
+			notifyDataSetChanged();
+		}
+	};
+
+	public T getLastItem() {
+		if (this.list.size() > 0) {
+			return getItem(getCount() - 1);
+		} else {
+			return null;
+		}
+	};
+
+	public T getFristItem() {
+		if (this.list.size() > 0) {
+			return getItem(0);
+		} else {
+			return null;
+		}
+	};
 }
