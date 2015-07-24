@@ -82,7 +82,10 @@ public class TableHelper {
 	}
 
 	/**
-	 * 获取sql语句
+	 * 获取sql语句 如果是双主键如下： sqlite> create table t1 ( ...> id int primary key, ...>
+	 * col varchar(20) ...> ); sqlite> create unique index uk_t1 on t1 (col);
+	 * 如果是想两个字段组成一个复合主键的话可以如下 create table t2 ( ...> id1 int , ...> id2 int,
+	 * ...> col varchar(20), ...> constraint pk_t2 primary key (id1,id2) ...> );
 	 */
 	public String getSQL() {
 		StringBuilder sb = new StringBuilder();
@@ -91,21 +94,33 @@ public class TableHelper {
 			sb.append("create table if not exists ");
 			// 表名
 			sb.append(" ").append(table.DTname()).append(" (");
-			sb.append(" _id ").append(DataType.Type_Int)
-					.append(" primary key autoincrement ");
+//			sb.append(" _id ").append(DataType.Type_Int);
+			// 检测是否存在复合主键,且联合主键对自增的列有影响
+			if ("".equals(table.UnionKey().trim())) {
+				sb.append(" _id ").append(DataType.Type_Int);
+				sb.append(" primary key autoincrement ,");
+			} else {
+				// 避免与复合主键冲突
+//				sb.append(" autoincrement ");
+			}
 			// 标记非第一个字段
 			boolean flag = false;
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field field : fields) {
 				if (field.isAnnotationPresent(org.wind.annotation.Field.class)) {
-					if (!flag) {
-						flag = true;
-						sb.append(",");
-					}
+//					if (!flag) {
+//						flag = true;
+//						sb.append(",");
+//					}
 					sb.append(getColumn(field));
 				}
 			}
 			sb.deleteCharAt(sb.length() - 1);
+			// 检测是否存在复合主键
+			if (!"".equals(table.UnionKey().trim())) {
+				sb.append(", constraint pk_key primary key (")
+						.append(table.UnionKey()).append(") ");
+			}
 			sb.append(" )");
 		} else if (dbi != null) {
 			sb.append(dbi.getTableSQL());
@@ -147,7 +162,12 @@ public class TableHelper {
 				|| Byte.TYPE.equals(field.getType())) {
 			sb.append(DataType.Type_Int);
 		} else {
-			sb.append(DataType.Type_Text);
+			if (inject.size() > 0) {
+				// 复合键需要确定长度
+				sb.append(" varchar(").append(inject.size()).append(")");
+			} else {
+				sb.append(DataType.Type_Text);
+			}
 		}
 		// 设置唯一字段
 		if (inject.unique()) {
