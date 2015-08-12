@@ -75,4 +75,8 @@ public abstract class OtherAdapter<T> extends BaseAdapter {
 			return null;
 		}
 	};
+
+	public ArrayList<T> getAllItem() {
+		return this.list;
+	}
 }
